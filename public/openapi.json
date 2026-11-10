@@ -1,0 +1,39 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Black&Milk API",
+    "version": "0.1.0",
+    "description": "Implemented scaffold endpoints only. Health checks application liveness, not database readiness."
+  },
+  "paths": {
+    "/api/v1/health": {
+      "get": {
+        "operationId": "getHealth",
+        "summary": "Check application liveness",
+        "responses": {
+          "200": {
+            "description": "The application is running; no external services are checked.",
+            "headers": {
+              "Cache-Control": {
+                "schema": { "type": "string", "const": "no-store" }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["status"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "status": { "type": "string", "const": "ok" }
+                  }
+                },
+                "example": { "status": "ok" }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

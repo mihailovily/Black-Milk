@@ -1,0 +1,57 @@
+name: Verify
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  application:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+      - run: npm install --global pnpm@11.25.0
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm format:check
+      - run: pnpm typecheck
+      - run: pnpm build
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm test
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-results
+          path: test-results/
+          retention-days: 7
+
+  container:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t black-and-milk:ci .
+      - name: Check container responds without secrets
+        run: |
+          docker run --detach --name black-and-milk -p 127.0.0.1:3000:3000 black-and-milk:ci
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:3000/api/v1/health > /tmp/health.json; then
+              node -e "const h=require('/tmp/health.json'); if(h.status!=='ok') process.exit(1)"
+              curl --fail --silent http://127.0.0.1:3000/ru > /dev/null
+              curl --fail --silent http://127.0.0.1:3000/en > /dev/null
+              exit 0
+            fi
+            sleep 2
+          done
+          docker logs black-and-milk
+          exit 1
+      - name: Container logs
+        if: failure()
+        run: docker logs black-and-milk
+      - name: Stop container
+        if: always()
+        run: docker rm --force black-and-milk

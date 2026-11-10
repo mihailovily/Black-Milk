@@ -1,0 +1,29 @@
+{
+  "Metadata": {
+    "title": "Coffee journal",
+    "description": "Your future coffee journal: bags of beans, brews, tasting notes and what’s left."
+  },
+  "Languages": {
+    "label": "Interface language",
+    "ru": "Русский",
+    "en": "English"
+  },
+  "Home": {
+    "skip": "Skip to content",
+    "eyebrow": "A personal coffee journal",
+    "title": "Coffee worth",
+    "titleEmphasis": "remembering.",
+    "description": "Your favourite beans, memorable brews and notes from every cup, all in one place.",
+    "explore": "Meet your future journal",
+    "journalTitle": "From the first bean to the last cup.",
+    "journalDescription": "We’re building a journal to help you notice the flavour and find your favourite combinations.",
+    "beansTitle": "Your beans",
+    "beansDescription": "Keep track of bags, roasters and dates. Remember which coffees you’d love to try again.",
+    "brewsTitle": "Your brews",
+    "brewsDescription": "Record your method, dose and tasting notes. Rate each brew from 1 to 10.",
+    "stockTitle": "What’s left",
+    "stockDescription": "Track your beans after each brew and adjust the remaining amount whenever you need to.",
+    "status": "The journal is in development. Google sign-in and personal entries are coming in later stages.",
+    "footer": "For your daily coffee ritual."
+  }
+}
