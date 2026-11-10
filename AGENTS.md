@@ -2,7 +2,7 @@
 
 ## Project Structure & Module Organization
 
-Black&Milk is a bilingual personal coffee journal. The initial baseline contained only `.gitattributes`; the current implementation is a Next.js application scaffold. Database access, Google authentication, and coffee features are planned, not implemented. Read `README.md` and `docs/` before changing scope.
+Black&Milk is a bilingual personal coffee journal. PostgreSQL, Drizzle, Better Auth, account pages and user administration are implemented. Coffee tracking is still planned. Public pages and builds work without secrets; authentication needs runtime configuration. Read `README.md` and `docs/` before changing scope.
 
 When introducing the application, organize files by responsibility and document the chosen layout in `README.md`. Prefer clear directories such as `src/` for source code, `tests/` for tests, and `assets/` for static resources when appropriate to the selected framework. Keep generated output and installed dependencies out of version control.
 
@@ -19,7 +19,7 @@ The first implementation should document prerequisites, dependency installation,
 
 Use strict TypeScript, ESLint, and Prettier. Use consistent indentation within each file, descriptive identifiers, and filenames that reflect their purpose. Respect `.gitattributes` and avoid unrelated line-ending changes. Code and identifiers are English; project documents are Russian; user-facing copy has matching Russian and English translations.
 
-Keep Route Handlers thin, server logic in `src/server`, and transport contracts in `src/contracts`. Product clients share REST/JSON under `/api/v1`; do not make Server Actions the only interface. PostgreSQL + Drizzle and Better Auth + Google are selected for a later phase; do not introduce required secrets into the scaffold. Do not import server modules or credentials into client components. Record architecture changes in `docs/architecture.md`.
+Keep Route Handlers thin, server logic in `src/server`, and transport contracts in `src/contracts`. Product clients share REST/JSON under `/api/v1`; do not make Server Actions the only interface. Better Auth runs under `/api/auth`; access policy must also cover its direct endpoints. Never trust a cached role or client-supplied role. Database migrations are explicit, never automatic at application startup. Do not import server modules or credentials into client components. Record architecture changes in `docs/architecture.md`.
 
 ## Design Guidelines
 
@@ -28,6 +28,8 @@ Read and follow [docs/design-system.md](docs/design-system.md) before creating o
 ## Testing Guidelines
 
 Playwright covers locales, navigation, the mobile layout, and the health API. There is no coverage threshold yet. Add meaningful tests alongside new behavior and document how to run them. Use descriptive test names that identify the behavior and expected outcome. Before opening a pull request, run all available checks and report any checks that could not be performed. Run `pnpm build` before `pnpm test`; Docker build/run verification requires an available Docker engine.
+
+For accounts also run `pnpm test:integration` and `pnpm test:accounts --workers=1`. These use real PostgreSQL, with an embedded local test cluster or `TEST_DATABASE_URL` pointing to a disposable database ending in `_tests`. Tests erase that database's public schema; never use a working database. Local mail is captured, never sent externally. The OAuth test provider is enabled only in NODE_ENV=test, never in production. Commands: `pnpm setup:local`, `pnpm db:generate`, `pnpm db:migrate`, `pnpm admin:bootstrap --email ADDRESS`.
 
 ## Commit & Pull Request Guidelines
 

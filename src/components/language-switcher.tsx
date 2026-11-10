@@ -1,7 +1,7 @@
 import { getLocale, getTranslations } from 'next-intl/server';
 import { routing } from '@/i18n/routing';
 
-export async function LanguageSwitcher() {
+export async function LanguageSwitcher({ path = '/' }: { path?: string }) {
   const [locale, t] = await Promise.all([
     getLocale(),
     getTranslations('Languages'),
@@ -12,7 +12,7 @@ export async function LanguageSwitcher() {
       {routing.locales.map((language) => (
         <a
           key={language}
-          href={`/${language}`}
+          href={`/${language}${path}`}
           lang={language}
           hrefLang={language}
           aria-label={t(language)}

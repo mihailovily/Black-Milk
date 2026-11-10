@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
-import en from '../messages/en.json';
-import ru from '../messages/ru.json';
+import en from '../messages/en.json' with { type: 'json' };
+import ru from '../messages/ru.json' with { type: 'json' };
 
 for (const [locale, messages] of Object.entries({ ru, en })) {
   test(`${locale}: page is translated, accessible by landmarks and fits the viewport`, async ({
@@ -81,7 +81,7 @@ test('health stays outside locale routing and matches its published contract', a
   expect(spec.status()).toBe(200);
   const document = await spec.json();
   expect(document.openapi).toBe('3.1.0');
-  expect(Object.keys(document.paths)).toEqual(['/api/v1/health']);
+  expect(Object.keys(document.paths)).toContain('/api/v1/health');
   expect(
     document.paths['/api/v1/health'].get.responses['200'].content[
       'application/json'

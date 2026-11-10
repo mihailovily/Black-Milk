@@ -2,6 +2,7 @@
   "name": "black-and-milk",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "packageManager": "pnpm@11.25.0",
   "engines": {
     "node": ">=22.19.0 <23",
@@ -16,15 +17,32 @@
     "format:check": "prettier --check .",
     "typecheck": "next typegen && tsc --noEmit",
     "test": "playwright test",
-    "test:ui": "playwright test --ui"
+    "test:ui": "playwright test --ui",
+    "db:generate": "drizzle-kit generate",
+    "setup:local": "node scripts/setup-local.mjs",
+    "db:migrate": "tsx scripts/migrate.ts",
+    "admin:bootstrap": "tsx scripts/bootstrap-admin.ts",
+    "test:integration": "tsx --test --test-concurrency=1 tests/integration/*.test.ts",
+    "test:accounts": "node scripts/run-accounts-tests.mjs"
   },
   "dependencies": {
     "next": "16.4.6",
     "next-intl": "4.14.9",
+    "better-auth": "1.7.19",
+    "@better-auth/drizzle-adapter": "1.7.19",
+    "drizzle-orm": "0.45.4",
+    "pg": "8.23.1",
+    "zod": "4.6.7",
+    "nodemailer": "10.5.0",
     "react": "19.3.1",
     "react-dom": "19.3.1"
   },
   "devDependencies": {
+    "@types/pg": "8.23.1",
+    "@types/nodemailer": "8.0.2",
+    "drizzle-kit": "0.31.11",
+    "tsx": "4.23.15",
+    "embedded-postgres": "17.11.0-beta.19",
     "@playwright/test": "1.65.0",
     "@types/node": "22.20.5",
     "@types/react": "19.3.0",

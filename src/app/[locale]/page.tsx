@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { hasLocale } from 'next-intl';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { LanguageSwitcher } from '@/components/language-switcher';
+import { SiteHeader, SiteFooter } from '@/components/site-shell';
 import { routing } from '@/i18n/routing';
 
 const photos = {
@@ -39,20 +39,7 @@ export default async function HomePage({
         </div>
       </div>
       <div className="container site-shell">
-        <header className="site-header">
-          <a
-            className="wordmark"
-            href={`/${locale}`}
-            aria-label="Black and Milk"
-          >
-            Black<span className="ampersand">&</span>Milk
-            <span className="wordmark-dot">.</span>
-          </a>
-          <a className="header-link" href="#journal">
-            {t('navJournal')}
-          </a>
-          <LanguageSwitcher />
-        </header>
+        <SiteHeader locale={locale} />
 
         <main id="main" tabIndex={-1}>
           <section className="hero" aria-labelledby="hero-title">
@@ -146,13 +133,7 @@ export default async function HomePage({
           </section>
         </main>
 
-        <footer className="site-footer">
-          <div>
-            <span className="footer-brand">Black&Milk.</span>
-            <p>{t('footer')}</p>
-          </div>
-          <p className="footer-status">{t('status')}</p>
-        </footer>
+        <SiteFooter />
       </div>
     </>
   );
