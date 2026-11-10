@@ -17,7 +17,16 @@ for (const [locale, messages] of Object.entries({ ru, en })) {
       `${messages.Home.title} ${messages.Home.titleEmphasis}`,
     );
     await expect(page.getByRole('main')).toBeVisible();
-    await expect(page.getByText(messages.Home.status)).toBeVisible();
+    await expect(
+      page.getByRole('link', { name: messages.Home.footerByline }),
+    ).toHaveAttribute('href', 'https://mihailovily.github.io/');
+    await expect(
+      page.getByRole('link', { name: messages.Home.footerProjectStatus }),
+    ).toHaveAttribute('href', 'https://github.com/mihailovily/Black-Milk');
+    await expect(
+      page.getByRole('link', { name: messages.Home.footerAffiliation }),
+    ).toHaveAttribute('href', 'https://shop.tastycoffee.ru/');
+    await expect(page.locator('.eyebrow')).toHaveCount(0);
     await expect(
       page.getByRole('link', {
         name: messages.Languages[locale as 'ru' | 'en'],
@@ -192,6 +201,10 @@ for (const [locale, messages] of Object.entries({ ru, en })) {
         expect(second!.y).toBe(first!.y);
         expect(second!.x).toBeGreaterThan(first!.x);
       }
+      await expect(page.locator('.category-card--brews img')).toHaveCSS(
+        'object-position',
+        '50% 0%',
+      );
       await page.evaluate(async () => {
         window.scrollTo(0, 0);
         await Promise.all(

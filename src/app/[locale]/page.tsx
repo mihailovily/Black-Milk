@@ -43,7 +43,6 @@ export default async function HomePage({
 
         <main id="main" tabIndex={-1}>
           <section className="hero" aria-labelledby="hero-title">
-            <p className="eyebrow">{t('eyebrow')}</p>
             <h1 id="hero-title">
               <strong>{t('title')}</strong> <span>{t('titleEmphasis')}</span>
             </h1>
@@ -80,7 +79,6 @@ export default async function HomePage({
             aria-labelledby="journal-title"
           >
             <div className="section-heading">
-              <p className="eyebrow">Black&Milk / {t('navJournal')}</p>
               <h2 id="journal-title">{t('journalTitle')}</h2>
               <p>{t('journalDescription')}</p>
             </div>
@@ -110,7 +108,6 @@ export default async function HomePage({
                 />
               </div>
               <div className="story-copy">
-                <p className="eyebrow">{t('ritualEyebrow')}</p>
                 <h2>{t('ritualTitle')}</h2>
                 <p>{t('ritualDescription')}</p>
               </div>
@@ -125,7 +122,6 @@ export default async function HomePage({
                 />
               </div>
               <div className="story-copy">
-                <p className="eyebrow">{t('flavourEyebrow')}</p>
                 <h2>{t('flavourTitle')}</h2>
                 <p>{t('flavourDescription')}</p>
               </div>

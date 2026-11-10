@@ -4,8 +4,8 @@
   --surface: #ffffff;
   --ink: #000000;
   --muted: #66666b;
-  --accent: #1770ff;
-  --accent-text: #125dcc;
+  --accent: #ff7f11;
+  --accent-text: #bd4f00;
   --line: #dddde2;
   --strip: #ebebee;
   --radius-card: 24px;
@@ -34,11 +34,11 @@ a {
   text-underline-offset: 0.25em;
 }
 a:focus-visible {
-  outline: 3px solid var(--accent);
+  outline: 3px solid var(--accent-text);
   outline-offset: 5px;
 }
 ::selection {
-  background: #c9ddff;
+  background: #ffe0c2;
   color: var(--ink);
 }
 h1,
@@ -170,11 +170,6 @@ h2 {
 .hero {
   padding-top: 20px;
 }
-.eyebrow {
-  margin-bottom: 14px;
-  color: var(--muted);
-  font-size: 12px;
-}
 h1 {
   margin-bottom: 20px;
   font-size: clamp(40px, 5vw, 64px);
@@ -230,7 +225,7 @@ h1 > span {
   object-position: 15% center;
 }
 .category-card--brews img {
-  object-position: center 40%;
+  object-position: center top;
 }
 .category-card--stock img {
   object-position: center;
@@ -400,6 +395,9 @@ dd {
 .footer-status {
   max-width: 52ch;
 }
+.site-footer a {
+  color: var(--accent-text);
+}
 
 @media (max-width: 760px) {
   :root {
@@ -463,9 +461,6 @@ dd {
     bottom: 16px;
     font-size: 20px;
   }
-  .category-card--brews img {
-    object-position: center 35%;
-  }
   .section-heading > p:last-child {
     font-size: 14px;
   }
@@ -527,7 +522,7 @@ button:focus-visible,
 input:focus-visible,
 select:focus-visible,
 summary:focus-visible {
-  outline: 3px solid var(--accent);
+  outline: 3px solid var(--accent-text);
   outline-offset: 5px;
 }
 .session-navigation {

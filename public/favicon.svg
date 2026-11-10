@@ -1,4 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <rect width="64" height="64" rx="12" fill="#282820" />
-  <text x="32" y="48" text-anchor="middle" font-family="Georgia, serif" font-size="48" fill="#f5f1e9">B</text>
+  <path
+    fill="#f5f1e9"
+    transform="translate(14.74 56) scale(0.067416 -0.067416)"
+    d="M457 209Q457 147 446.5 111Q436 75 409 47Q364 0 261 0H55V712H261Q362 712 410 666Q436 641 446.5 608.5Q457 576 457 518Q457 437 418 398Q403 383 385 374Q406 363 418 349Q457 309 457 209ZM242 312H197V128H242Q284 128 299.5 149Q315 170 315 220Q315 270 299 291Q283 312 242 312ZM315 508Q315 549 300 566.5Q285 584 244 584H197V432H244Q284 432 299.5 450Q315 468 315 508Z"
+  />
 </svg>

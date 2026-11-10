@@ -34,9 +34,16 @@ export async function SiteFooter() {
     <footer className="site-footer">
       <div>
         <span className="footer-brand">Black&Milk.</span>
-        <p>{t('footer')}</p>
+        <p>
+          <a href="https://mihailovily.github.io/">{t('footerByline')}</a>
+        </p>
       </div>
-      <p className="footer-status">{t('status')}</p>
+      <p className="footer-status">
+        <a href="https://github.com/mihailovily/Black-Milk">
+          {t('footerProjectStatus')}
+        </a>{' '}
+        <a href="https://shop.tastycoffee.ru/">{t('footerAffiliation')}</a>
+      </p>
     </footer>
   );
 }
