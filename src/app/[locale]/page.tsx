@@ -8,6 +8,7 @@ import { routing } from '@/i18n/routing';
 const photos = {
   beans: '/images/coffee/mike-kenneally-TD4DBagg2wE-unsplash.jpg',
   brews: '/images/coffee/andrew-valdivia-mMI5sdLFoHM-unsplash.jpg',
+  stock: '/images/coffee/ideadad-SoMHwovUDqA-unsplash.jpg',
   ritual: '/images/coffee/rizky-subagja-1k7TnX5GAww-unsplash.jpg',
   flavour: '/images/coffee/demi-deherrera-L-sm1B4L1Ns-unsplash.jpg',
 };
@@ -68,7 +69,7 @@ export default async function HomePage({
                   key={feature}
                 >
                   <Image
-                    src={feature === 'brews' ? photos.brews : photos.beans}
+                    src={photos[feature]}
                     alt=""
                     fill
                     sizes="(max-width: 760px) calc(100vw - 40px), (max-width: 1280px) 33vw, 384px"

@@ -233,14 +233,10 @@ h1 > span {
   object-position: center 40%;
 }
 .category-card--stock img {
-  object-position: 85% center;
-  transform: scale(1.65);
+  object-position: center;
 }
 .category-card:hover img {
   transform: scale(1.04);
-}
-.category-card--stock:hover img {
-  transform: scale(1.7);
 }
 .category-card:hover::after {
   background: rgb(0 0 0 / 64%);
