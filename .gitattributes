@@ -1,2 +1,5 @@
 # Auto detect text files and perform LF normalization
 * text=auto eol=lf
+
+# Keep the supplied font archive byte-for-byte, including its original demos.
+src/assets/fonts/** -text whitespace=-blank-at-eof

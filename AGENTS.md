@@ -21,6 +21,10 @@ Use strict TypeScript, ESLint, and Prettier. Use consistent indentation within e
 
 Keep Route Handlers thin, server logic in `src/server`, and transport contracts in `src/contracts`. Product clients share REST/JSON under `/api/v1`; do not make Server Actions the only interface. PostgreSQL + Drizzle and Better Auth + Google are selected for a later phase; do not introduce required secrets into the scaffold. Do not import server modules or credentials into client components. Record architecture changes in `docs/architecture.md`.
 
+## Design Guidelines
+
+Read and follow [docs/design-system.md](docs/design-system.md) before creating or changing UI. It is the required visual guideline for both locales and future pages: use the supplied local DIN Pro Condensed and Gotham Pro fonts, shared CSS tokens, documented layout and component states. Keep the source font archive unchanged and import only the required faces.
+
 ## Testing Guidelines
 
 Playwright covers locales, navigation, the mobile layout, and the health API. There is no coverage threshold yet. Add meaningful tests alongside new behavior and document how to run them. Use descriptive test names that identify the behavior and expected outcome. Before opening a pull request, run all available checks and report any checks that could not be performed. Run `pnpm build` before `pnpm test`; Docker build/run verification requires an available Docker engine.

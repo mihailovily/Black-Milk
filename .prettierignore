@@ -10,3 +10,6 @@ blob-report/
 pnpm-lock.yaml
 next-env.d.ts
 *.tsbuildinfo
+
+# Preserve the supplied font archive, including its original CSS and demo.
+src/assets/fonts/

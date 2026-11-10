@@ -93,3 +93,155 @@ test('unknown pages return 404', async ({ request }) => {
   const response = await request.get('/ru/does-not-exist');
   expect(response.status()).toBe(404);
 });
+
+for (const [locale, messages] of Object.entries({ ru, en })) {
+  test(`${locale}: photo links and skip link support keyboard navigation`, async ({
+    page,
+  }) => {
+    await page.goto(`/${locale}`);
+    await page.keyboard.press('Tab');
+    const skip = page.getByRole('link', { name: messages.Home.skip });
+    await expect(skip).toBeFocused();
+    await expect(skip).toBeInViewport();
+    await page.keyboard.press('Enter');
+    await expect(page.getByRole('main')).toBeFocused();
+
+    for (const feature of ['beans', 'brews', 'stock'] as const) {
+      const link = page.getByRole('link', {
+        name: messages.Home[`${feature}Title`],
+        exact: true,
+      });
+      await link.focus();
+      await expect(link).toBeFocused();
+      expect(
+        await link.evaluate(
+          (element) => getComputedStyle(element).outlineStyle,
+        ),
+      ).toBe('solid');
+      await page.keyboard.press('Enter');
+      await expect(page).toHaveURL(new RegExp(`/${locale}#${feature}$`));
+      await expect(page.locator(`#${feature}`)).toBeInViewport();
+    }
+  });
+
+  test(`${locale}: local fonts and photographs render across responsive widths`, async ({
+    page,
+  }, testInfo) => {
+    test.skip(
+      testInfo.project.name !== 'desktop',
+      'The viewport matrix runs once per locale.',
+    );
+    const failures: string[] = [];
+    page.on('requestfailed', (request) => {
+      // Resizing can cancel an obsolete srcset candidate before its replacement loads.
+      if (
+        request.resourceType() === 'image' &&
+        request.failure()?.errorText === 'net::ERR_ABORTED'
+      )
+        return;
+      failures.push(`${request.failure()?.errorText} ${request.url()}`);
+    });
+    page.on('request', (request) => {
+      if (new URL(request.url()).origin !== 'http://127.0.0.1:3100') {
+        failures.push(`External request: ${request.url()}`);
+      }
+    });
+    page.on('pageerror', (error) => failures.push(error.message));
+    page.on('console', (message) => {
+      if (message.type() === 'error') failures.push(message.text());
+    });
+    page.on('response', (response) => {
+      if (response.status() >= 400)
+        failures.push(`${response.status()} ${response.url()}`);
+    });
+    await page.goto(`/${locale}`);
+    for (const width of [360, 390, 768, 1280, 1440]) {
+      await page.setViewportSize({ width, height: 900 });
+      const images = page.locator('main img');
+      for (const image of await images.all()) {
+        await image.scrollIntoViewIfNeeded();
+        await expect
+          .poll(() =>
+            image.evaluate(async (element) => {
+              const image = element as HTMLImageElement;
+              try {
+                await image.decode();
+                return image.complete && image.naturalWidth > 0;
+              } catch {
+                return false;
+              }
+            }),
+          )
+          .toBe(true);
+      }
+      await page.evaluate(() => document.fonts.ready);
+      expect(
+        await page.evaluate(
+          () => document.documentElement.scrollWidth <= innerWidth,
+        ),
+      ).toBe(true);
+      const cards = page.locator('.category-card');
+      const first = await cards.nth(0).boundingBox();
+      const second = await cards.nth(1).boundingBox();
+      expect(first).not.toBeNull();
+      expect(second).not.toBeNull();
+      if (width <= 760) {
+        expect(second!.y).toBeGreaterThan(first!.y);
+        expect(first!.height).toBeLessThan(first!.width);
+      } else {
+        expect(second!.y).toBe(first!.y);
+        expect(second!.x).toBeGreaterThan(first!.x);
+      }
+      await page.evaluate(async () => {
+        window.scrollTo(0, 0);
+        await Promise.all(
+          Array.from(document.images).map((image) => image.decode()),
+        );
+        // Let the compositor paint the decoded images after scrolling back to the top.
+        await new Promise<void>((resolve) =>
+          requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+        );
+      });
+      await page.screenshot({
+        path: testInfo.outputPath(`${locale}-${width}.png`),
+        fullPage: true,
+      });
+      if (width === 1440) {
+        await page.screenshot({
+          path: testInfo.outputPath(`${locale}-preview.png`),
+        });
+      }
+    }
+    const fontState = await page.evaluate(() => {
+      const din = getComputedStyle(document.documentElement)
+        .getPropertyValue('--font-din')
+        .trim()
+        .split(',')[0]
+        .replaceAll('"', '')
+        .replaceAll("'", '');
+      const gotham = getComputedStyle(document.documentElement)
+        .getPropertyValue('--font-gotham')
+        .trim()
+        .split(',')[0]
+        .replaceAll('"', '')
+        .replaceAll("'", '');
+      return {
+        din: ['400', '500', '900'].map((weight) =>
+          document.fonts.check(`${weight} 24px "${din}"`, 'АаЁёЙй Coffee'),
+        ),
+        gotham: ['400', '500'].map((weight) =>
+          document.fonts.check(`${weight} 16px "${gotham}"`, 'АаЁёЙй Coffee'),
+        ),
+        loaded: Array.from(document.fonts).filter(
+          (face) => face.status === 'loaded',
+        ).length,
+        synthetic: getComputedStyle(document.body).fontSynthesis,
+      };
+    });
+    expect(fontState.din).toEqual([true, true, true]);
+    expect(fontState.gotham).toEqual([true, true]);
+    expect(fontState.loaded).toBeGreaterThanOrEqual(5);
+    expect(fontState.synthetic).toBe('none');
+    expect(failures).toEqual([]);
+  });
+}

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="refresh" content="5;url=https://freefontzone.com/font/gotham-pro">
+  <title>Gotham Pro - FreeFontZone</title>
+  <style>
+    :root {
+      --paper: #f5f0e8;
+      --ink: #111111;
+      --red: #d83a2e;
+      --blue: #1f5faa;
+      --yellow: #efb61f;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Futura", "Trebuchet MS", sans-serif;
+      color: var(--ink);
+      background:
+        linear-gradient(135deg, rgba(216, 58, 46, 0.16), transparent 38%),
+        linear-gradient(315deg, rgba(31, 95, 170, 0.14), transparent 40%),
+        var(--paper);
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    .card {
+      width: min(760px, 100%);
+      background: rgba(255, 252, 246, 0.96);
+      border: 4px solid var(--ink);
+      padding: 32px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 14px 14px 0 var(--ink);
+    }
+
+    .card::before,
+    .card::after {
+      content: "";
+      position: absolute;
+      z-index: 0;
+    }
+
+    .card::before {
+      width: 180px;
+      height: 180px;
+      background: var(--red);
+      border-radius: 50%;
+      top: -72px;
+      right: -48px;
+    }
+
+    .card::after {
+      width: 0;
+      height: 0;
+      border-left: 120px solid transparent;
+      border-right: 120px solid transparent;
+      border-bottom: 180px solid var(--blue);
+      left: -52px;
+      bottom: -54px;
+      transform: rotate(-18deg);
+    }
+
+    .content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .kicker {
+      display: inline-block;
+      margin-bottom: 14px;
+      padding: 8px 12px;
+      background: var(--yellow);
+      border: 2px solid var(--ink);
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 0 0 16px;
+      max-width: 10ch;
+      font-size: clamp(2.4rem, 8vw, 4.8rem);
+      line-height: 0.95;
+      text-transform: uppercase;
+    }
+
+    p {
+      margin: 0 0 14px;
+      max-width: 44rem;
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    .grid {
+      display: grid;
+      gap: 12px;
+      margin: 24px 0;
+    }
+
+    .info {
+      border: 2px solid var(--ink);
+      background: white;
+      padding: 14px 16px;
+    }
+
+    .label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .value {
+      font-size: 1rem;
+      word-break: break-word;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 26px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 14px 20px;
+      border: 2px solid var(--ink);
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 700;
+      color: var(--ink);
+      background: white;
+    }
+
+    .btn.primary {
+      background: var(--red);
+      color: white;
+    }
+
+    @media (max-width: 640px) {
+      .card {
+        padding: 24px;
+        box-shadow: 8px 8px 0 var(--ink);
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <div class="content">
+      <span class="kicker">FreeFontZone Download</span>
+      <h1>Gotham Pro</h1>
+      <p>Your download is ready. This archive includes only the font file assets for <strong>Gotham Pro</strong> plus this guide.</p>
+      <p>This page will redirect to the matching FreeFontZone font page in 5 seconds.</p>
+
+      <section class="grid">
+        <div class="info">
+          <span class="label">Downloaded</span>
+          <span class="value">Gotham Pro</span>
+        </div>
+        <div class="info">
+          <span class="label">Font Page</span>
+          <span class="value">https://freefontzone.com/font/gotham-pro</span>
+        </div>
+      </section>
+
+      <div class="actions">
+        <a class="btn primary" href="https://freefontzone.com/font/gotham-pro">Open Gotham Pro</a>
+        <a class="btn" href="https://freefontzone.com/fonts">Browse More Fonts</a>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
