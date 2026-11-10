@@ -1,0 +1,36 @@
+# Repository Guidelines
+
+## Project Structure & Module Organization
+
+Black&Milk is a bilingual personal coffee journal. The initial baseline contained only `.gitattributes`; the current implementation is a Next.js application scaffold. Database access, Google authentication, and coffee features are planned, not implemented. Read `README.md` and `docs/` before changing scope.
+
+When introducing the application, organize files by responsibility and document the chosen layout in `README.md`. Prefer clear directories such as `src/` for source code, `tests/` for tests, and `assets/` for static resources when appropriate to the selected framework. Keep generated output and installed dependencies out of version control.
+
+## Build, Test, and Development Commands
+
+Use Node.js 22.19+ within major 22 and pnpm 11.25.0. Install with `pnpm install --frozen-lockfile`. Available commands are `pnpm dev`, `pnpm build`, `pnpm start`, `pnpm lint`, `pnpm format:check`, `pnpm format`, `pnpm typecheck`, and `pnpm test`. Browser tests require Chromium (`pnpm exec playwright install chromium`) and a prior production build.
+
+The first implementation should document prerequisites, dependency installation, local startup, and verification commands in `README.md`. Commit the relevant dependency manifest and lockfile together. Useful repository checks now include:
+
+- `git status --short`: review pending changes.
+- `git diff --check`: detect whitespace errors in tracked changes.
+
+## Coding Style & Naming Conventions
+
+Use strict TypeScript, ESLint, and Prettier. Use consistent indentation within each file, descriptive identifiers, and filenames that reflect their purpose. Respect `.gitattributes` and avoid unrelated line-ending changes. Code and identifiers are English; project documents are Russian; user-facing copy has matching Russian and English translations.
+
+Keep Route Handlers thin, server logic in `src/server`, and transport contracts in `src/contracts`. Product clients share REST/JSON under `/api/v1`; do not make Server Actions the only interface. PostgreSQL + Drizzle and Better Auth + Google are selected for a later phase; do not introduce required secrets into the scaffold. Do not import server modules or credentials into client components. Record architecture changes in `docs/architecture.md`.
+
+## Testing Guidelines
+
+Playwright covers locales, navigation, the mobile layout, and the health API. There is no coverage threshold yet. Add meaningful tests alongside new behavior and document how to run them. Use descriptive test names that identify the behavior and expected outcome. Before opening a pull request, run all available checks and report any checks that could not be performed. Run `pnpm build` before `pnpm test`; Docker build/run verification requires an available Docker engine.
+
+## Commit & Pull Request Guidelines
+
+The repository started with a single `Initial commit` and no established commit convention. Use concise, imperative subjects, such as `Add application scaffold`, and keep commits focused.
+
+Pull requests should explain the purpose, summarize changes, and list verification performed. Link related issues when available; include screenshots for visual changes. Document new configuration and required environment variables, and never commit secrets or local credentials.
+
+## User Authorization for Local Commits
+
+On 2026-11-10 the user explicitly authorized the agent to create local Git commits while carrying out assigned work and asked for this permission to be recorded. Routine focused commits within the authorized task do not require repeated confirmation. Review the staged changes and run applicable checks first; report checks that could not run. This permission does not itself authorize pushing, publishing, deployment, destructive history changes, or unrelated work. Preserve user changes and never commit secrets, generated output, or installed dependencies.
