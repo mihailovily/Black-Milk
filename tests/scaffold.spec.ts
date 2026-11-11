@@ -17,14 +17,30 @@ for (const [locale, messages] of Object.entries({ ru, en })) {
       `${messages.Home.title} ${messages.Home.titleEmphasis}`,
     );
     await expect(page.getByRole('main')).toBeVisible();
+    await expect(page.locator('.site-footer > div p')).toHaveText(
+      `${messages.Home.footerBylinePrefix} ${messages.Home.footerBylineName}`,
+    );
     await expect(
-      page.getByRole('link', { name: messages.Home.footerByline }),
+      page.getByRole('link', {
+        name: messages.Home.footerBylineName,
+        exact: true,
+      }),
     ).toHaveAttribute('href', 'https://mihailovily.github.io/');
+    await expect(page.locator('.footer-status')).toHaveText(
+      `${messages.Home.footerProjectPrefix}${messages.Home.footerProjectLink}${messages.Home.footerAffiliationPrefix}${messages.Home.footerAffiliation}.`,
+    );
+    await expect(page.locator('.footer-status a')).toHaveCount(2);
     await expect(
-      page.getByRole('link', { name: messages.Home.footerProjectStatus }),
+      page.getByRole('link', {
+        name: messages.Home.footerProjectLink,
+        exact: true,
+      }),
     ).toHaveAttribute('href', 'https://github.com/mihailovily/Black-Milk');
     await expect(
-      page.getByRole('link', { name: messages.Home.footerAffiliation }),
+      page.getByRole('link', {
+        name: messages.Home.footerAffiliation,
+        exact: true,
+      }),
     ).toHaveAttribute('href', 'https://shop.tastycoffee.ru/');
     await expect(page.locator('.eyebrow')).toHaveCount(0);
     await expect(

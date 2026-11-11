@@ -35,14 +35,17 @@ export async function SiteFooter() {
       <div>
         <span className="footer-brand">Black&Milk.</span>
         <p>
-          <a href="https://mihailovily.github.io/">{t('footerByline')}</a>
+          {t('footerBylinePrefix')}{' '}
+          <a href="https://mihailovily.github.io/">{t('footerBylineName')}</a>
         </p>
       </div>
       <p className="footer-status">
+        {t('footerProjectPrefix')}
         <a href="https://github.com/mihailovily/Black-Milk">
-          {t('footerProjectStatus')}
-        </a>{' '}
-        <a href="https://shop.tastycoffee.ru/">{t('footerAffiliation')}</a>
+          {t('footerProjectLink')}
+        </a>
+        {t('footerAffiliationPrefix')}
+        <a href="https://shop.tastycoffee.ru/">{t('footerAffiliation')}</a>.
       </p>
     </footer>
   );
