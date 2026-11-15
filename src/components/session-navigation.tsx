@@ -4,10 +4,12 @@ export function SessionNavigation({
   locale,
   signIn,
   account,
+  coffee,
 }: {
   locale: string;
   signIn: string;
   account: string;
+  coffee: string;
 }) {
   const [authenticated, setAuthenticated] = useState(false);
   useEffect(() => {
@@ -19,11 +21,18 @@ export function SessionNavigation({
     return () => controller.abort();
   }, []);
   return (
-    <a
-      className="header-link session-navigation"
-      href={`/${locale}/${authenticated ? 'account' : 'sign-in'}`}
-    >
-      {authenticated ? account : signIn}
-    </a>
+    <>
+      {authenticated ? (
+        <a className="header-link" href={`/${locale}/coffee`}>
+          {coffee}
+        </a>
+      ) : null}
+      <a
+        className="header-link session-navigation"
+        href={`/${locale}/${authenticated ? 'account' : 'sign-in'}`}
+      >
+        {authenticated ? account : signIn}
+      </a>
+    </>
   );
 }

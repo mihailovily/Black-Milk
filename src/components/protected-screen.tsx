@@ -12,11 +12,13 @@ export async function ProtectedScreen({
   locale,
   path,
   admin = false,
+  title,
   children,
 }: {
   locale: string;
   path: string;
   admin?: boolean;
+  title?: string;
   children: React.ReactNode;
 }) {
   if (!hasLocale(routing.locales, locale)) notFound();
@@ -41,7 +43,9 @@ export async function ProtectedScreen({
       {denied ? (
         <section className="panel service-state">
           <h1>
-            <strong>{admin ? m.Admin.title : m.Account.title}</strong>
+            <strong>
+              {title || (admin ? m.Admin.title : m.Account.title)}
+            </strong>
           </h1>
           <p role="alert">{m.Errors[denied]}</p>
           <a

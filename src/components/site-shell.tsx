@@ -23,6 +23,7 @@ export async function SiteHeader({
         locale={locale}
         signIn={t('signIn')}
         account={t('account')}
+        coffee={(await getTranslations('Coffee'))('title')}
       />
       <LanguageSwitcher path={path} />
     </header>

@@ -5,6 +5,7 @@ import { AppError } from '@/server/errors';
 import { getConfig, googleEnabled, ConfigurationError } from '@/server/config';
 import * as service from '@/server/accounts';
 import { getAuth } from '@/server/auth';
+import * as coffee from '@/server/coffee';
 
 export const dynamic = 'force-dynamic';
 async function handle(request: Request) {
@@ -55,6 +56,57 @@ async function handle(request: Request) {
     }
     const current = await requireSession(request.headers, path[0] === 'admin');
     if (mutation) await limitRequest(request, 'user:' + current.user.id, 60);
+    if (['coffee-items', 'coffee-sets', 'brews'].includes(path[0])) {
+      const owner = current.user.id;
+      const id = path[1];
+      if (id) z.string().uuid().parse(id);
+      if (path.length === 1) {
+        if (method === 'GET')
+          return path[0] === 'brews'
+            ? coffee.listBrews(owner, url)
+            : coffee.listInventory(owner, url, path[0] === 'coffee-sets');
+        if (method === 'POST') {
+          const input = await request.json();
+          return path[0] === 'brews'
+            ? coffee.createBrew(owner, input)
+            : path[0] === 'coffee-sets'
+              ? coffee.createSet(owner, input)
+              : coffee.createItem(owner, input);
+        }
+      }
+      if (path.length === 2 && id) {
+        if (method === 'GET')
+          return path[0] === 'brews'
+            ? coffee.getBrew(owner, id)
+            : path[0] === 'coffee-sets'
+              ? coffee.getSet(owner, id)
+              : coffee.getItem(owner, id);
+        if (method === 'PATCH' || method === 'DELETE') {
+          const input = await request.json();
+          if (path[0] === 'brews')
+            return coffee.updateBrew(owner, id, input, method === 'DELETE');
+          if (path[0] === 'coffee-sets')
+            return method === 'DELETE'
+              ? coffee.deleteSet(owner, id, input)
+              : coffee.updateSet(owner, id, input);
+          return method === 'DELETE'
+            ? coffee.deleteItem(owner, id, input)
+            : coffee.updateItem(owner, id, input);
+        }
+      }
+      if (
+        path[0] === 'coffee-items' &&
+        id &&
+        path.length === 3 &&
+        path[2] === 'adjustments'
+      ) {
+        if (method === 'GET')
+          return (await coffee.getItem(owner, id)).adjustments;
+        if (method === 'POST')
+          return coffee.adjustItem(owner, id, await request.json());
+      }
+      throw new AppError('NOT_FOUND', 404);
+    }
     if (path[0] === 'me') {
       if (path.length === 1 && method === 'GET')
         return service.getProfile(current.user.id);

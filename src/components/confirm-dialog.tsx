@@ -6,12 +6,14 @@ import { Field } from './field';
 export function ConfirmDialog({
   title,
   email,
+  warning,
   messages,
   onConfirm,
   onCancel,
 }: {
   title: string;
   email?: string;
+  warning?: string;
   messages: UiMessages;
   onConfirm: (value: string) => Promise<void>;
   onCancel: () => void;
@@ -43,7 +45,10 @@ export function ConfirmDialog({
     >
       <h2 id="confirm-title">{title}</h2>
       <p>
-        {email ? messages.Admin.deleteWarning : messages.Common.confirmWarning}
+        {warning ||
+          (email
+            ? messages.Admin.deleteWarning
+            : messages.Common.confirmWarning)}
       </p>
       <form
         onSubmit={async (e) => {

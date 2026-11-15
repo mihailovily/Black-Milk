@@ -74,6 +74,8 @@ export function AccountPanel({
       <div className="workspace-grid">
         <aside className="workspace-nav">
           <nav aria-label={m.Account.title}>
+            <a href={`/${locale}/coffee`}>{m.Coffee.title}</a>
+            <a href={`/${locale}/brews`}>{m.Coffee.brews}</a>
             <a
               href={`/${locale}/account`}
               aria-current={!security ? 'page' : undefined}

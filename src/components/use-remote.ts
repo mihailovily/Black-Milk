@@ -1,7 +1,7 @@
 'use client';
 import { useCallback, useEffect, useState } from 'react';
 import { api, errorCode } from './api-client';
-export function useRemote<T>(url: string | null) {
+export function useRemote<T>(url: string | null, retainData = false) {
   const [version, setVersion] = useState(0);
   const [state, setState] = useState<{
     url: string | null;
@@ -16,14 +16,21 @@ export function useRemote<T>(url: string | null) {
       .then((data) => setState({ url, version, data }))
       .catch((error) => {
         if (!controller.signal.aborted)
-          setState({ url, version, error: errorCode(error) });
+          setState((previous) => ({
+            url,
+            version,
+            error: errorCode(error),
+            ...(retainData && previous.url === url
+              ? { data: previous.data }
+              : {}),
+          }));
       });
     return () => controller.abort();
-  }, [url, version]);
+  }, [url, version, retainData]);
   const reload = useCallback(() => setVersion((value) => value + 1), []);
   const current = state.url === url && state.version === version;
   return {
-    data: current ? state.data : undefined,
+    data: current || (retainData && state.url === url) ? state.data : undefined,
     error: current ? state.error : undefined,
     loading: Boolean(url && !current),
     reload,

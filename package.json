@@ -23,7 +23,8 @@
     "db:migrate": "tsx scripts/migrate.ts",
     "admin:bootstrap": "tsx scripts/bootstrap-admin.ts",
     "test:integration": "tsx --test --test-concurrency=1 tests/integration/*.test.ts",
-    "test:accounts": "node scripts/run-accounts-tests.mjs"
+    "test:accounts": "node scripts/run-accounts-tests.mjs",
+    "test:coffee": "node scripts/run-coffee-tests.mjs"
   },
   "dependencies": {
     "next": "16.4.6",

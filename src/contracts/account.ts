@@ -19,6 +19,9 @@ export type SessionSummary = {
   expiresAt: string;
 };
 export type ApiErrorCode =
+  | 'INSUFFICIENT_STOCK'
+  | 'HAS_HISTORY'
+  | 'ARCHIVED'
   | 'UNAUTHORIZED'
   | 'FORBIDDEN'
   | 'INVALID_INPUT'

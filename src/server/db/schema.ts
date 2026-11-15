@@ -8,6 +8,7 @@ import {
   uniqueIndex,
   index,
   check,
+  jsonb,
 } from 'drizzle-orm/pg-core';
 import { sql } from 'drizzle-orm';
 
@@ -142,3 +143,133 @@ export const requestLimit = pgTable('request_limits', {
   count: integer('count').notNull(),
   resetAt: timestamp('reset_at', { withTimezone: true }).notNull(),
 });
+
+export const coffeeSets = pgTable(
+  'coffee_sets',
+  {
+    id: text('id').primaryKey(),
+    userId: text('user_id')
+      .notNull()
+      .references(() => user.id, { onDelete: 'cascade' }),
+    name: text('name').notNull(),
+    roaster: text('roaster').notNull().default(''),
+    note: text('note').notNull().default(''),
+    archived: boolean('archived').notNull().default(false),
+    version: integer('version').notNull().default(1),
+    createdAt: createdAt(),
+  },
+  (t) => [index('coffee_sets_owner_idx').on(t.userId)],
+);
+export const coffeeItems = pgTable(
+  'coffee_items',
+  {
+    position: integer('position').notNull().default(0),
+    id: text('id').primaryKey(),
+    userId: text('user_id')
+      .notNull()
+      .references(() => user.id, { onDelete: 'cascade' }),
+    setId: text('set_id').references(() => coffeeSets.id, {
+      onDelete: 'set null',
+    }),
+    name: text('name').notNull(),
+    format: text('format', { enum: ['beans', 'ground', 'drip'] }).notNull(),
+    initialQuantity: integer('initial_quantity').notNull(),
+    remaining: integer('remaining').notNull(),
+    roaster: text('roaster').notNull().default(''),
+    country: text('country').notNull().default(''),
+    region: text('region').notNull().default(''),
+    processing: text('processing').notNull().default(''),
+    tastingNotes: text('tasting_notes').notNull().default(''),
+    note: text('note').notNull().default(''),
+    roastDate: text('roast_date'),
+    openedDate: text('opened_date'),
+    bestBefore: text('best_before'),
+    dripWeight: integer('drip_weight'),
+    repeat: boolean('repeat').notNull().default(false),
+    archived: boolean('archived').notNull().default(false),
+    version: integer('version').notNull().default(1),
+    createdAt: createdAt(),
+  },
+  (t) => [
+    index('coffee_items_owner_idx').on(t.userId),
+    index('coffee_items_set_idx').on(t.setId),
+    check('coffee_items_format', sql`${t.format} in ('beans','ground','drip')`),
+    check(
+      'coffee_items_quantity',
+      sql`${t.initialQuantity} > 0 and ${t.remaining} >= 0`,
+    ),
+    check(
+      'coffee_items_drip_weight',
+      sql`${t.dripWeight} is null or (${t.format} = 'drip' and ${t.dripWeight} > 0)`,
+    ),
+  ],
+);
+export const coffeeBrews = pgTable(
+  'coffee_brews',
+  {
+    id: text('id').primaryKey(),
+    userId: text('user_id')
+      .notNull()
+      .references(() => user.id, { onDelete: 'cascade' }),
+    itemId: text('item_id')
+      .notNull()
+      .references(() => coffeeItems.id, { onDelete: 'cascade' }),
+    quantity: integer('quantity').notNull(),
+    unit: text('unit').notNull(),
+    method: text('method').notNull(),
+    occurredAt: timestamp('occurred_at', { withTimezone: true }).notNull(),
+    rating: integer('rating'),
+    note: text('note').notNull().default(''),
+    version: integer('version').notNull().default(1),
+    createdAt: createdAt(),
+  },
+  (t) => [
+    index('coffee_brews_owner_time_idx').on(t.userId, t.occurredAt),
+    index('coffee_brews_item_idx').on(t.itemId),
+    check('coffee_brews_quantity', sql`${t.quantity} > 0`),
+    check('coffee_brews_rating', sql`${t.rating} between 1 and 10`),
+    check('coffee_brews_unit', sql`${t.unit} in ('piece','tenth-gram')`),
+    check(
+      'coffee_brews_method',
+      sql`${t.method} in ('espresso','pour-over','aeropress','french-press','cezve','other','drip')`,
+    ),
+  ],
+);
+export const coffeeAdjustments = pgTable(
+  'coffee_adjustments',
+  {
+    kind: text('kind', { enum: ['manual', 'initial'] })
+      .notNull()
+      .default('manual'),
+    id: text('id').primaryKey(),
+    userId: text('user_id')
+      .notNull()
+      .references(() => user.id, { onDelete: 'cascade' }),
+    itemId: text('item_id')
+      .notNull()
+      .references(() => coffeeItems.id, { onDelete: 'cascade' }),
+    delta: integer('delta').notNull(),
+    reason: text('reason').notNull(),
+    createdAt: createdAt(),
+  },
+  (t) => [
+    index('coffee_adjustments_item_idx').on(t.itemId),
+    check('coffee_adjustments_kind', sql`${t.kind} in ('manual','initial')`),
+  ],
+);
+export const coffeeOperations = pgTable(
+  'coffee_operations',
+  {
+    id: text('id').primaryKey(),
+    userId: text('user_id')
+      .notNull()
+      .references(() => user.id, { onDelete: 'cascade' }),
+    operationId: text('operation_id').notNull(),
+    fingerprint: text('fingerprint').notNull(),
+    result: jsonb('result').notNull(),
+    createdAt: createdAt(),
+  },
+  (t) => [
+    uniqueIndex('coffee_operations_owner_key').on(t.userId, t.operationId),
+  ],
+);
